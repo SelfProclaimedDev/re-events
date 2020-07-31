@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import EventListItem from './EventListItem';
 
-function EventList({events}) {
+function EventList({events, selectEvent,deleteEvent}) {
     return (
         <Fragment>
 
@@ -9,7 +9,8 @@ function EventList({events}) {
     
                 events.map(event => (
                     
-                    <EventListItem key={event.id} event={event}/>
+                    <EventListItem key={event.id} event={event} selectEvent={selectEvent} 
+                    deleteEvent={deleteEvent}/>
                 ))
             
             }

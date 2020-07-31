@@ -1,36 +1,67 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Segment, Header, Form, Button } from 'semantic-ui-react';
+import cuid from 'cuid';
 
-function EventForm({setFormOpen}) {
+function EventForm({setFormOpen, setEvents, createEvent, selectedEvent, updateEvent}) {
+
+    const initialValues = selectedEvent ?? {
+
+        title:'',
+        category:'',
+        description:'',
+        city:'',
+        venue:'',
+        date:''
+    }
+    const [values , setValues] = useState(initialValues);
+
+    function handleFormSubmit(){
+
+        selectedEvent ? updateEvent({...selectedEvent, ...values}) :
+        createEvent({...values, id:cuid(), hostedBy:'Bob', attendees:[], hostPhotoURL: '/assets/user.png'});
+        setFormOpen(false);
+    }
+
+    function handleFormChange(e){
+        const {name, value} = e.target;
+        setValues({...values, [name]: value}); 
+    }
+
     return (
         <Segment clearing>
-            <Header content='Create new event' />
-            <Form>
+            <Header content={ selectedEvent? 'Editing the event':'Create new event'} />
+            <Form onSubmit={handleFormSubmit}>
                 <Form.Field>
-                    <input type='text' placeholder='Event title'/>
+                    <input name='title' type='text' placeholder='Event title' value={values.title} 
+                    onChange={handleFormChange}/>
                 </Form.Field>
 
                 <Form.Field>
-                    <input type='text' placeholder='Category'/>
+                    <input name='category' type='text' placeholder='Category' value={values.category} 
+                    onChange={handleFormChange}/>
                 </Form.Field>
 
                 <Form.Field>
-                    <input type='text' placeholder='Description'/>
+                    <input name='description' type='text' placeholder='Description' value={values.description} 
+                    onChange={handleFormChange}/>
                 </Form.Field>
 
                 <Form.Field>
-                    <input type='text' placeholder='City'/>
+                    <input name='city' type='text' placeholder='City' value={values.city} 
+                    onChange={handleFormChange}/>
                 </Form.Field>
 
                 <Form.Field>
-                    <input type='text' placeholder='Venue'/>
+                    <input name='venue' type='text' placeholder='Venue' value={values.venue} 
+                    onChange={handleFormChange}/>
                 </Form.Field>
 
                 <Form.Field>
-                    <input type='date' placeholder='Date'/>
+                    <input name='date' type='date' placeholder='Date' value={values.date} 
+                    onChange={handleFormChange}/>
                 </Form.Field>
-                <Button type='submit' floated='right' positive content='Submit'/>
-                <Button onClick={() => setFormOpen(false)}  floated='right' content='Cancel'/>
+                <Button  type='submit' floated='right' positive content='Submit'/>
+                <Button floated='right' content='Cancel'/>
             </Form>
         </Segment>
     );
