@@ -1,7 +1,10 @@
 import React, { Fragment } from 'react'
 import EventListItem from './EventListItem';
 
+
+
 function EventList({events}) {
+
     return (
         <Fragment>
 

@@ -48,6 +48,8 @@ export default function asyncReducer(state = initialState, {type , payload}){
             }
 
         case ASYNC_ACTION_ERROR:
+
+            
             return{
                 ...state,
                 loading:false,
