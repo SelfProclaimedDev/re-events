@@ -50,7 +50,7 @@ export default function MyPlaceInput({label, options ,  ...props}) {
                 }
                 {
 
-                    suggestions ?.length >0 && (
+                    suggestions?.length >0 && (
 
                         <Segment loading={loading} style={{marginTop:0, position : 'absolute', zIndex: 1000,
                         width:'100%'
