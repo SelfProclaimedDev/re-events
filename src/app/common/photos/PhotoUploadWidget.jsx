@@ -29,10 +29,13 @@ export default function PhotoUploadWidget() {
 
                     <>
 
-                        <div className='img-preview' style={{minHeight:200, minWidth:200, overflow:'hidden'}}>
-                                <Button style={{width:100}} positive icon='check'/>
-                                <Button style={{width:100}} icon='close'/>
-                        </div>
+                        <div className='img-preview' style={{minHeight:200, minWidth:200, overflow:'hidden'}}/>
+                        <Button.Group>
+                            <Button style={{width:100}} positive icon='check'/>
+                            <Button style={{width:100}} icon='close'/>
+                        </Button.Group>
+                                
+                        
 
                     </> 
                 }
