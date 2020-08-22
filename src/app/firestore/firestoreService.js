@@ -37,17 +37,19 @@ export function listenToEventFromFirestore(eventId){
 }
 
 export function addEventToFirestore(event){
-
+    const user = firebase.auth().currentUser;
     return db.collection('events').add({
 
         ...event,
-        hostedBy:'Diana',
-        hostPhotoURL : "https://randomuser.me/api/portraits/women/13.jpg",
+        hostedBy:user.displayName,
+        hostUid: user.uid,
+        hostPhotoURL : user.photoURL || null,
         attendees : firebase.firestore.FieldValue.arrayUnion({
-            id: cuid(),
-            displayName: 'Diana',
-            photoURL: "https://randomuser.me/api/portraits/women/29.jpg"
-        })
+            id: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL || null
+        }),
+        attendeeIds : firebase.firestore.FieldValue.arrayUnion(user.uid)
     })
 
 }
@@ -166,4 +168,38 @@ export function deletePhotoFromCollection(photoId){
 
     const userUid = firebase.auth().currentUser.uid;
     return db.collection('users').doc(userUid).collection('photos').doc(photoId).delete();
+}
+
+export function addUserAttendance(event){
+
+    const user = firebase.auth().currentUser;
+
+    return db.collection('events').doc(event.id).update({
+
+        attendees : firebase.firestore.FieldValue.arrayUnion({
+            id: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL || null
+        }),
+        attendeeIds : firebase.firestore.FieldValue.arrayUnion(user.uid)
+    })
+}
+
+export async function cancelUserAttendance(event){
+
+    const user = firebase.auth().currentUser;
+
+    try{
+        const eventDoc = await db.collection('events').doc(event.id).get();
+
+        return db.collection('events').doc(event.id).update({
+
+            attendeeIds : firebase.firestore.FieldValue.arrayRemove(user.uid),
+            attendees: eventDoc.data().attendees.filter(attendee => attendee.id !== user.uid)
+        })
+
+    }
+    catch(error){
+        throw error;
+    }
 }
