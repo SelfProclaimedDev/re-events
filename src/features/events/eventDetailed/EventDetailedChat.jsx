@@ -6,6 +6,7 @@ import { getEventChatRef, firebaseObjectsToArrays } from '../../../app/firestore
 import { listenToEventChat } from '../eventActions';
 import { Link } from 'react-router-dom';
 import {formatDistance} from 'date-fns';
+import { CLEAR_COMMENTS } from '../eventConstants';
 
 function EventDetailedChat({eventId}) {
 
@@ -19,6 +20,12 @@ function EventDetailedChat({eventId}) {
             if(!snapshot.exists) return;
             dispatch(listenToEventChat(firebaseObjectsToArrays(snapshot.val()).reverse()));
         })
+
+        return () => {
+
+            dispatch({type:CLEAR_COMMENTS});
+            getEventChatRef().off();
+        }
     },[eventId, dispatch])
     return (
         
