@@ -17,7 +17,7 @@ function EventDetailedChat({eventId}) {
         getEventChatRef(eventId).on('value' , snapshot =>{
 
             if(!snapshot.exists) return;
-            dispatch(listenToEventChat(firebaseObjectsToArrays(snapshot.val())));
+            dispatch(listenToEventChat(firebaseObjectsToArrays(snapshot.val()).reverse()));
         })
     },[eventId, dispatch])
     return (
@@ -34,8 +34,9 @@ function EventDetailedChat({eventId}) {
 </Segment>
 
 <Segment attached>
-    <Comment.Group>
 
+    <EventDetailedChatForm eventId={eventId}/>
+    <Comment.Group>
     {comments.map(comment => (
         <Comment key={comment.id}>
             <Comment.Avatar src={comment.photoURL || '/assets/user.png'}/>
@@ -44,7 +45,12 @@ function EventDetailedChat({eventId}) {
                 <Comment.Metadata>
                     <div>{formatDistance(comment.date, new Date())}</div>
                 </Comment.Metadata>
-                <Comment.Text>{comment.text}</Comment.Text>
+                <Comment.Text>{comment.text.split('\n').map((text ,i ) => (
+                    <span key={i}>
+                        {text}
+                        <br/>
+                    </span>
+                ))}</Comment.Text>
                 <Comment.Actions>
                     <Comment.Action>Reply</Comment.Action>
                 </Comment.Actions>
@@ -53,7 +59,7 @@ function EventDetailedChat({eventId}) {
     ))}
         
     </Comment.Group>
-    <EventDetailedChatForm eventId={eventId}/>
+    
 </Segment>
 </>
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { toast } from 'react-toastify';
 import { addEventChatComment } from '../../../app/firestore/firebaseService';
 import MyTextArea from '../../../app/common/form/MyTextArea';
-import { Button } from 'semantic-ui-react';
+import { Button, Loader } from 'semantic-ui-react';
 
 export default function EventDetailedChatForm({eventId}) {
     return (
@@ -24,22 +24,32 @@ export default function EventDetailedChatForm({eventId}) {
             }}
         >
         
-        {({isSubmitting}) => (
+        {({isSubmitting, handleSubmit}) => (
 
             <Form className='ui form'>
+                <Field name='comment'>
+                
+                    {({field}) => (
 
-                <MyTextArea
-                name='comment'
-                placeholder='Enter your comments here...'
-                rows={2}
-                />
-                <Button
-                loading={isSubmitting}
-                content='Add reply'
-                icon='edit'
-                primary
-                type='submit'
-                />
+                        <div style={{position: 'relative'}}>
+                            <Loader active={isSubmitting}/>
+                            <textarea 
+                            rows={2} 
+                            {...field} 
+                            placeholder='Enter your comment (Enter to Submit, Shift + Enter for new line)'
+                            onKeyPress={(e) => {
+                                if(e.key === 'Enter' && e.shiftKey){
+                                    return;
+                                }
+                                if(e.key === 'Enter' && !e.shiftKey){
+
+                                    handleSubmit();
+                                }
+                            }}>
+                            </textarea>
+                        </div>
+                    )}
+                </Field>
             </Form>
         )}
         </Formik>
