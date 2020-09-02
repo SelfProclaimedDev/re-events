@@ -64,7 +64,7 @@ functions.firestore
 
     if(before.attendees.length < after.attendees.length){
 
-        let attendeeJoined = after.attendees.filter(item1 => !before.attendees.some(item2 => item1 === item2))[0];
+        let attendeeJoined = after.attendees.filter(item1 => !before.attendees.some(item2 => item1.id === item2.id))[0];
         console.log(attendeeJoined);
 
         try{
@@ -82,7 +82,7 @@ functions.firestore
 
     if(before.attendees.length > after.attendees.length){
 
-        let attendeeLeft = before.attendees.filter(item1 => !after.attendees.some(item2 => item1 === item2))[0];
+        let attendeeLeft = before.attendees.filter(item1 => !after.attendees.some(item2 => item1.id === item2.id))[0];
         console.log(attendeeLeft);
 
         try{
